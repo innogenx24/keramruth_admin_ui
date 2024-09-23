@@ -1,5 +1,5 @@
 import React from 'react';
-import MemberAdoTable from '../../components/sales-components/member-ado/MemberAdoTable';
+import MemberAdoTable from '../../components/homepage-component/ado-user-table/MemberAdoTable';
 
 const ViewMember = () => {
   return (

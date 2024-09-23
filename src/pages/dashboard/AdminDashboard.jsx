@@ -14,7 +14,6 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import Divider from '@mui/material/Divider';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
@@ -36,8 +35,8 @@ import { Avatar } from '@mui/material';
 
 
 // Drawer width
-// const drawerWidth = 240;
-const drawerWidth = 300;
+const drawerWidth = 240;
+// const drawerWidth = 300;
 
 // Mixin for opened Drawer
 const openedMixin = (theme) => ({
@@ -167,6 +166,9 @@ export default function AdminDashboard() {
     navigate(path);
   };
 
+
+
+  ///
   const menuItems = [
     {
       text: 'HomePage',
@@ -190,12 +192,16 @@ export default function AdminDashboard() {
     },
     {
       text: 'Report',
-      path: '/dashboard/report',
+      // path: '/dashboard/report',
       icon: <ReportIcon />,
+      subItems: [
+        { text: 'EX1', path: '/dashboard/ex1', default: true, icon: <AdminPanelSettingsIcon /> },
+        { text: 'EX2', path: '/dashboard/ex2', icon: <SalesTargetIcon /> },
+      ],
     },
     {
       text: 'Masters',
-      path: '/dashboard/add-list',
+      // path: '/dashboard/add-list',
       icon: <AdminPanelSettingsIcon />,
       subItems: [
         { text: 'Admin', path: '/dashboard/add-list', default: true, icon: <AdminPanelSettingsIcon /> },
@@ -206,6 +212,70 @@ export default function AdminDashboard() {
       ],
     },
   ];
+
+  ///
+  const MenuItem = ({ item, openExpand, handleClick, handleItemClick, location }) => (
+    <React.Fragment>
+      <ListItem disablePadding
+        sx={{
+          '&:hover': { backgroundColor: 'transparent' },
+          ...(openExpand[item.text] ? {
+            background: 'linear-gradient(90deg, #01C572 0%, #187E53 100%)',
+            color: '#fff',
+            borderRadius: '4px 4px 0 0'
+          } : {}),
+        }}>
+        <ListItemButton onClick={() => handleClick(item.text)} sx={{ width: '100%', pl: 2 }}>
+          <ListItemIcon sx={{ color: location.pathname === item.path || openExpand[item.text] ? '#fff' : 'inherit' }}>
+            {item.icon}
+          </ListItemIcon>
+          <ListItemText primary={item.text} />
+          {item.subItems ? (openExpand[item.text] ? <ExpandLess /> : <ExpandMore />) : null}
+        </ListItemButton>
+      </ListItem>
+      {item.subItems && (
+  <Collapse in={openExpand[item.text]} timeout="auto" unmountOnExit>
+    <List component="div" disablePadding sx={{background: 'linear-gradient(90deg, #01C572 0%, #187E53 100%)',  borderRadius: '0 0 4px 4px'}}>
+      {item.subItems.map((subItem) => (
+        <ListItem key={subItem.text} disablePadding sx={{ px: 4, py:0.5 }}>
+          <ListItemButton
+            selected={location.pathname === subItem.path}
+            onClick={() => handleItemClick(subItem.path)}
+            sx={{
+              height: '38px', 
+              '&:hover': { backgroundColor: 'rgba(1, 197, 114, 0.2)' }, // Add hover effect
+              '&.Mui-selected': {
+                background: '#fff',
+                color: 'green',
+                borderRadius: '4px',
+              },
+              '&:not(.Mui-selected)': {
+                color: '#000', // Clear text color for unselected items
+                backgroundColor: 'transparent', // Clear background
+              },
+            }}
+          >
+            <ListItemIcon sx={{ color: location.pathname === subItem.path ? 'green' : '#000' }}>
+              {subItem.icon}
+            </ListItemIcon>
+            <ListItemText primary={subItem.text}
+                sx={{
+                  fontFamily: 'Inter', 
+                  fontWeight: 500, 
+                  fontSize: '16px', 
+                  color: location.pathname === subItem.path ? 'green' : '#fff', // Adjust text color for selected state
+                }} 
+             />
+          </ListItemButton>
+        </ListItem>
+      ))}
+    </List>
+  </Collapse>
+)}
+
+    </React.Fragment>
+  );
+  
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -252,74 +322,16 @@ export default function AdminDashboard() {
           </IconButton>
         </DrawerHeader>
         <List>
-          {menuItems.map((item) => (
-            <React.Fragment key={item.text}>
-              <ListItem disablePadding onClick={() => handleClick(item.text)}
-                selected={location.pathname === item.path}
-                sx={{
-                  '&:hover': { backgroundColor: 'transparent' },
-                  '&.Mui-selected': {
-                    background: 'linear-gradient(90deg, #01C572 0%, #187E53 100%)',
-                    color: '#fff',
-                    borderRadius: '4px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    width: '100%',
-                  },
-                }}>
-                <ListItemButton
-                  sx={{
-
-                    width: '100%'
-
-                  }}
-                >
-                  <ListItemIcon sx={{ color: location.pathname === item.path ? '#fff' : 'inherit' }}>
-                    {item.icon} {/* Render the icon dynamically */}
-                  </ListItemIcon>
-                  <ListItemText primary={item.text} />
-                  {item.subItems ? (openExpand[item.text] ? <ExpandLess /> : <ExpandMore />) : null}
-                </ListItemButton>
-                {item.subItems && (
-                  <Collapse in={openExpand[item.text]} timeout="auto" unmountOnExit>
-                    <List component="div" disablePadding>
-                      {item.subItems.map((subItem) => (
-                        <ListItem key={subItem.text} disablePadding sx={{ pl: 2, pr: 2 }}>
-                          <ListItemButton
-                            selected={location.pathname === subItem.path}
-                            onClick={() => handleItemClick(subItem.path)}
-                            sx={{
-                              '&:hover': { backgroundColor: 'transparent' },
-                              '&.Mui-selected': {
-                                background: '#fff',
-                                color: 'green',
-                                borderRadius: '4px',
-                              },
-                              '&.Mui-selected .MuiListItemIcon-root': {
-                                color: 'green',
-                              },
-                              '&:not(.Mui-selected)': {
-                                color: '#fff',
-                                backgroundColor: 'transparent',
-                              },
-                            }}
-                          >
-                            <ListItemIcon sx={{ color: location.pathname === subItem.path ? 'green' : '#fff' }}>
-                              {subItem.icon}
-                            </ListItemIcon>
-                            <ListItemText primary={subItem.text} />
-                          </ListItemButton>
-                        </ListItem>
-                      ))}
-                    </List>
-                  </Collapse>
-                )}
-
-              </ListItem>
-
-              {/* <Divider /> */}
-            </React.Fragment>
-          ))}
+        {menuItems.map((item) => (
+          <MenuItem
+            key={item.text}
+            item={item}
+            openExpand={openExpand}
+            handleClick={handleClick}
+            handleItemClick={handleItemClick}
+            location={location}
+          />
+        ))}
 
         </List>
       </Drawer>
