@@ -1,7 +1,7 @@
 import { takeLatest, call, put } from 'redux-saga/effects';
 import axios from 'axios';
 import { deleteProductFailure, deleteProductRequest, deleteProductSuccess } from '../../slices/product-slice/ProductDeleteSlice';
-// import { fetchProductsRequest } from '../../slices/product-slice/ProductGetSlice';
+
 
 
 function deleteProductApi(productId, token) {

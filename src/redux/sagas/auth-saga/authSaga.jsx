@@ -9,12 +9,16 @@ import {
   signInRequest, 
   signUpRequest 
 } from '../../slices/authSlice';
+import { ADMIN_API } from '../../../constants/ApiConstant';
+
 
 function* signIn(action) {
+  const api2 = import.meta.env.VITE_API_ENDPOINT;
+
   try {
-    const response = yield call(axios.post, 'http://localhost:3002/api/admin/signin', action.payload);
+    const response = yield call(axios.post, `${api2}${ADMIN_API.SIGNIN}`, action.payload);
     yield put(signInSuccess({ user: response.data.user, token: response.data.token }));
-    localStorage.setItem('token', response.data.token); // Save token in localStorage
+    localStorage.setItem('token', response.data.token); 
   } catch (error) {
     yield put(signInFailure(error.response.data.message || 'An error occurred'));
   }
@@ -22,7 +26,7 @@ function* signIn(action) {
 
 function* signUp(action) {
   try {
-    const response = yield call(axios.post, 'http://localhost:3002/api/auth/signup', action.payload);
+    const response = yield call(axios.post, `${api2}${ADMIN_API.SIGNUP}`, action.payload);
     yield put(signUpSuccess({ user: response.data.user }));
   } catch (error) {
     yield put(signUpFailure(error.response.data.message || 'An error occurred'));
