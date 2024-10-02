@@ -1,0 +1,24 @@
+.bar_chart_containr{
+    background-color: #f4f5ff !important;
+    // border-radius: 11px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    // //    width: 100%;
+    // max-width: 500px; 
+    // margin: 0 auto;
+
+    // height: 248px;
+    width: 100%;
+    height: 263px;
+    padding: 30px 15px 10px 15px;
+}
+
+.bar_chart{
+    // height: 172px;
+    height: 90%;
+}
+
+.slaes_dotimg{
+    display: flex;
+    justify-content: space-between;
+    padding: 0 30px;
+}
